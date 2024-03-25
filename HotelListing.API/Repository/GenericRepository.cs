@@ -62,9 +62,9 @@ namespace HotelListing.API.Repository
             await _context.SaveChangesAsync();
         }
         //// !!!!! x 10
-        Task<T> IGenericRepository<T>.UpdateAsync(T entity)
-        {
-            throw new NotImplementedException();
-        }
+        //Task<T> IGenericRepository<T>.UpdateAsync(T entity)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
