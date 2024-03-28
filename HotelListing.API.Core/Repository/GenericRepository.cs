@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using HotelListing.API.Core.Exceptions;
 using System.Diagnostics.Metrics;
+using HotelListing.API.Core.Models.Hotel;
 
 namespace HotelListing.API.Core.Repository
 {
@@ -90,12 +91,13 @@ namespace HotelListing.API.Core.Repository
 
         public async Task<T> GetAsync(int? id)
         {
-            if (id is null)
+            var result = await _context.Set<T>().FindAsync(id);
+            if (result is null)
             {
-                return null;
+                throw new NotFoundException(typeof(T).Name, id.HasValue ? id : "No Key Provided");
             }
 
-            return await _context.Set<T>().FindAsync(id);
+            return result;
         }
 
         public async Task<TResult> GetAsync<TResult>(int? id)
@@ -114,8 +116,13 @@ namespace HotelListing.API.Core.Repository
             _context.Update(entity);
             await _context.SaveChangesAsync();
         }
-        public async Task UpdateAsync<TSource>(int id, TSource source)
+        public async Task UpdateAsync<TSource>(int id, TSource source) where TSource : IBaseDto
         {
+            if (id != source.Id)
+            {
+                throw new BadRequestException("Invalid Id used in request");
+            }
+
             var entity = await GetAsync(id);
 
             if (entity == null)

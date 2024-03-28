@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using HotelListing.API.Core.Models.Country;
 using HotelListing.API.Core.Models;
 using HotelListing.API.Core.Repository;
+using HotelListing.API.Core.Models.Users;
 
 namespace HotelListing.API.Controllers
 {
@@ -34,7 +35,7 @@ namespace HotelListing.API.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels()
         {
-            var hotels = await _hotelsRepository.GetAllAsync<List<HotelDto>>();
+            var hotels = await _hotelsRepository.GetAllAsync<HotelDto>();
             return Ok(hotels);
         }
 
@@ -59,11 +60,6 @@ namespace HotelListing.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel(int id, HotelDto hotelDto)
         {
-            if (id != hotelDto.Id)
-            {
-                return BadRequest("Invalid Id used in request");
-            }
-
             try
             {
                 await _hotelsRepository.UpdateAsync(id, hotelDto);

@@ -25,7 +25,7 @@ namespace HotelListing.API.Core.Middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Something Went while processing {context.Request.Path}");
+                _logger.LogError(ex, $"Something Went wrong while processing {context.Request.Path}");
                 await HandleExceptionAsync(context, ex);
             }
         }
@@ -45,6 +45,10 @@ namespace HotelListing.API.Core.Middleware
                 case NotFoundException notFoundException:
                     statusCode = HttpStatusCode.NotFound;
                     errorDetails.ErrorType = "Not Found";
+                    break;
+                case BadRequestException badRequestException:
+                    statusCode = HttpStatusCode.BadRequest;
+                    errorDetails.ErrorType = "Bad Request";
                     break;
                 default:
                     break;

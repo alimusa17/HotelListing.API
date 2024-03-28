@@ -12,6 +12,7 @@ using HotelListing.API.Core.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using HotelListing.API.Core.Exceptions;
 using HotelListing.API.Core.Models;
+using HotelListing.API.Core.Models.Users;
 
 namespace HotelListing.API.Controllers
 {
@@ -61,12 +62,7 @@ namespace HotelListing.API.Controllers
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> PutCountry(int id, UpdateCountryDto updateCountryDto)
-        {
-            if (id != updateCountryDto.Id)
-            {
-                return BadRequest("Invalid Record Id");
-            }
-
+        {            
             try
             {
                 await _countriesRepository.UpdateAsync(id, updateCountryDto);
